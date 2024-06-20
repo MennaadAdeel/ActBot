@@ -1,0 +1,3 @@
+**Humanoid Robot for Autism Communication Aid**
+
+This project aims to develop a humanoid robot designed to assist children with autism in improving their communication skills. The robot interacts with the child using a combination of speech recognition, text-to-speech, servo motor movements, and visual displays on a touchscreen. The entire system is controlled by a Raspberry Pi and communicates with a mobile application using the MQTT protocol. The robot provides engaging and interactive sessions to help children practice and enhance their communication abilities in a friendly and supportive environment.
