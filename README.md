@@ -55,7 +55,7 @@ This project aims to develop a humanoid robot designed to assist children with a
  -      cd humanoid_robot_project
 **2.Install the required Python libraries:**
 
-- pip3 install -r requirements.txt
+-       pip3 install -r requirements.txt
 
 
 # **Configuration**
