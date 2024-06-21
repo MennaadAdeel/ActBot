@@ -1,5 +1,5 @@
 
-# ***Humanoid Robot for Autism Communication Aid***
+# ***Humanoid Robot for Autism Communication Aid (ActBot)***
 
 
 This project aims to develop a humanoid robot designed to assist children with autism in improving their communication skills. The robot interacts with the child using a combination of speech recognition, text-to-speech, servo motor movements, and visual displays on a touchscreen. The entire system is controlled by a Raspberry Pi and communicates with a mobile application using the MQTT protocol. The robot provides engaging and interactive sessions to help children practice and enhance their communication abilities in a friendly and supportive environment.
@@ -51,8 +51,8 @@ This project aims to develop a humanoid robot designed to assist children with a
 
 **1. Clone the repository:**
 
- -      git clone https://github.com/your-username/humanoid_robot_project.git
- -      cd humanoid_robot_project
+ -      git clone https://github.com/MennaadAdeel/ActBot.git
+ -      cd ActBot
 **2.Install the required Python libraries:**
 
 -       pip3 install -r requirements.txt
