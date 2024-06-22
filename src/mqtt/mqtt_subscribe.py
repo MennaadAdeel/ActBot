@@ -12,17 +12,35 @@ def on_connect(client, userdata, flags, rc):
 
 # Callback function for when a PUBLISH message is received from the broker
 def on_message(client, userdata, msg):
-    print(f"Message received: {msg.payload.decode()} on topic {msg.topic}")
+    process_received_message(msg.payload.decode())
 
-# Initialize MQTT client
-client = mqtt.Client()
+def process_received_message(message):
+    print(f"Message received: {message}")
+    # Extract session information from the message and handle accordingly
+    # Assuming message format: "Child: <child_name>, Session: <session_count>"
+    parts = message.split(", ")
+    child_name = parts[0].split(": ")[1]
+    session_count = int(parts[1].split(": ")[1])
+    handle_session_info(child_name, session_count)
 
-# Assign callback functions
-client.on_connect = on_connect
-client.on_message = on_message
+def handle_session_info(child_name, session_count):
+    print(f"Handling session info for {child_name} with session count {session_count}")
+    # Implement the logic to handle the session information
+    # For example, you might log this information or trigger some actions on the robot
 
-# Connect to broker
-client.connect(broker_address, port, 60)
+# Function to initialize and start the MQTT subscriber
+def start_mqtt_subscriber():
+    client = mqtt.Client()
 
-# Start the loop
-client.loop_forever()
+    # Assign callback functions
+    client.on_connect = on_connect
+    client.on_message = on_message
+
+    # Connect to broker
+    client.connect(broker_address, port, 60)
+
+    # Start the loop
+    client.loop_start()
+    return client
+
+
