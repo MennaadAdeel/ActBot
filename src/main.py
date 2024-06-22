@@ -1,12 +1,10 @@
-import mqtt
+from src.mqtt.mqtt_subscribe import start_mqtt_subscriber
 import ai_models
 import motor
 import display
 import mice_speacker
 
 def main():
-    # Initialize components
-    initialize_database()
 
     # Start MQTT subscriber
     client = start_mqtt_subscriber()

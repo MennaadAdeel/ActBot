@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import time
 
 # Define broker address and port
-broker_address = "o19fa16f.ala.us-east-1.emqxsl.com"  # Use the IP address if accessing remotely
+broker_address = "o19fa16f.ala.us-east-1.emqxsl.com"
 port = 1883
 topic = "ActBot1234"
 
@@ -28,18 +28,8 @@ client.connect(broker_address, port, 60)
 # Start the loop
 client.loop_start()
 
-try:
-    while True:
-        # Your data to be sent
-        data = "Hello from Raspberry Pi!"
+# Function to publish blinking score and session score
+def publish_scores(blinking_score, session_score):
+    data = f"Blinking Score: {blinking_score}, Session Score: {session_score}"
+    client.publish(topic, data)
 
-        # Publish data to the topic
-        client.publish(topic, data)
-
-        # Sleep for some time before publishing next message
-        time.sleep(5)  # 5 seconds interval
-
-except KeyboardInterrupt:
-    # Disconnect from MQTT broker
-    client.disconnect()
-    client.loop_stop()
