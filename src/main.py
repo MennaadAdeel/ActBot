@@ -1,8 +1,10 @@
 from src.mqtt.mqtt_subscribe import start_mqtt_subscriber
-import ai_models
-import motor
-import display
-import mice_speacker
+from src.mqtt.mqtt_publisher import publish_scores
+from src.ai_models.speech.face_detection import calculate_ear
+from src.motor.servo_control import clap_hands
+from src.display.touchscreen import display_celebrate
+from src.mice_speacker.mice import AudioSegment
+#from src.mice_speacker.speacker import 
 
 def main():
 
