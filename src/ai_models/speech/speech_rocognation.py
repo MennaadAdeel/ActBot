@@ -3,6 +3,11 @@ from pydub import AudioSegment
 import pyaudio
 import wave
 
+# Azure Speech Service credentials
+SPEECH_KEY = "YOUR_SPEECH_KEY"
+SPEECH_REGION = "YOUR_SPEECH_REGION"
+
+# Function to record audio from the microphone
 def record_audio(audio_file_path, duration=5):
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
@@ -19,7 +24,7 @@ def record_audio(audio_file_path, duration=5):
 
     print("Recording...")
 
-    for i in range(0, int(RATE / CHUNK * duration)):
+    for _ in range(0, int(RATE / CHUNK * duration)):
         data = stream.read(CHUNK)
         frames.append(data)
 
@@ -35,14 +40,12 @@ def record_audio(audio_file_path, duration=5):
         wf.setframerate(RATE)
         wf.writeframes(b''.join(frames))
 
+# Function to recognize speech and assess pronunciation from an audio file
 def recognize_from_audio(label, audio_file):
-    SPEECH_KEY = "5e8fed82a65f498aa2c5516947e762a4"
-    SPEECH_REGION = "eastus"
     speech_config = speechsdk.SpeechConfig(
         subscription=SPEECH_KEY, region=SPEECH_REGION
     )
     speech_config.set_property(speechsdk.PropertyId.Speech_LogFilename, "speechsdk.log")
-
     speech_config.speech_recognition_language = "ar-SA"
 
     audio_config = speechsdk.audio.AudioConfig(filename=audio_file)
@@ -51,7 +54,9 @@ def recognize_from_audio(label, audio_file):
         speech_config=speech_config, audio_config=audio_config
     )
 
-    pronunciation_assessment_config = speechsdk.PronunciationAssessmentConfig(json_string="{{\"ReferenceText\":\"{}\",\"gradingSystem\":\"HundredMark\",\"granularity\":\"Word\"}}".format(label))
+    pronunciation_assessment_config = speechsdk.PronunciationAssessmentConfig(
+        json_string=f'{{"ReferenceText":"{label}","gradingSystem":"HundredMark","granularity":"Word"}}'
+    )
 
     pronunciation_assessment_config.apply_to(speech_recognizer)
 
@@ -61,32 +66,31 @@ def recognize_from_audio(label, audio_file):
 
     return pronunciation_assessment_result
 
+# Function to convert any audio file to WAV format (if needed)
 def convert_to_wav(audio_file, audio_file_path):
     with open(audio_file_path, "wb") as f:
         f.write(audio_file)
         f.close()
 
-        sound = AudioSegment.from_file(audio_file_path)
-        sound.export(audio_file_path, format="wav") 
+    sound = AudioSegment.from_file(audio_file_path)
+    sound.export(audio_file_path, format="wav")
 
     return audio_file_path
 
+# Function to predict the pronunciation score
 def predict_score(label, audio_file_path):
     result = recognize_from_audio(label, audio_file_path)
-    
-    if result._accuracy_score >= 50:
-        return ("passed", result._accuracy_score)
+
+    if result.accuracy_score >= 50:
+        return "passed", result.accuracy_score
     else:
-        return ("failed", result._accuracy_score)
-    
-    
-    # Replace 'تفاحة' with the desired label for pronunciation assessment
-label = 'تفاحة'
-audio_file_path = 'recorded_audio.wav'
+        return "failed", result.accuracy_score
 
-# Record audio from the microphone
-record_audio(audio_file_path)
+# Main function to record audio, recognize speech, and assess pronunciation
+def assess_pronunciation(label, audio_file_path='recorded_audio.wav', duration=5):
+    # Record audio
+    record_audio(audio_file_path, duration)
 
-# Predict the pronunciation score
-result = predict_score(label, audio_file_path)
-print(result)
+    # Predict the pronunciation score
+    result = predict_score(label, audio_file_path)
+    return result
